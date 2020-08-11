@@ -6,6 +6,7 @@ const exphbs = require("express-handlebars");
 const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
 
 // Map global promise - gets rid of mongodb deprecated promise warning
 mongoose.promise = global.Promise;
@@ -105,15 +106,34 @@ app.post("/ideas", (req, res) => {
 // the id is just a placeholder (route param)
 app.get("/ideas/edit/:id", (req, res) => {
   Idea.findOne({
-    _id : req.params.id
+    _id: req.params.id,
   })
-  .lean()
-  .then((idea) => {
-    res.render('ideas/edit', {
-      idea : idea
-    })
-  })
+    .lean()
+    .then((idea) => {
+      res.render("ideas/edit", {
+        idea: idea,
+      });
+    });
 });
+
+// method overiride middleware, overirde helps us to create put requests
+app.use(methodOverride("_method"));
+
+// edit form process
+app.put("/ideas/:id", (req, res) => {
+  Idea.findOne({
+    _id: req.params.id,
+  }).then((idea) => {
+    // new values
+    idea.title = req.body.title;
+    idea.details = req.body.details;
+
+    idea.save().then((idea) => {
+      res.redirect("/ideas");
+    });
+  });
+});
+
 // PORT
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

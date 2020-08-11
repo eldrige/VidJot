@@ -5,7 +5,8 @@
 {{/each}}
 <div class="card card-body">
     <h1>Edit Video Ideas</h1>
-    <form action="/ideas" method="post">
+    <form action="/ideas/{{idea._id}}?_method=PUT" method="post">
+    <input type="hidden" name="_method" value="PUT">
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" class="form-control" name="title" required value="{{idea.title}}">
