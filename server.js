@@ -53,7 +53,8 @@ app.get("/about", (req, res) => {
 
 // idea index page, where data from db will be fetched and displayed
 app.get("/ideas", (req, res) => {
-  Idea.find({}).lean()
+  Idea.find({})
+    .lean()
     .sort({ date: "desc" })
     .then((ideas) => {
       res.render("ideas/index", {
@@ -61,10 +62,8 @@ app.get("/ideas", (req, res) => {
       });
       console.log(ideas);
     });
-    // find finds all of the ideas
-    // lean converts the returnd data from mongo json to js json
-
-  
+  // find finds all of the ideas
+  // lean converts the returnd data from mongo json to js json
 });
 
 // Add idea route (form)
@@ -102,17 +101,18 @@ app.post("/ideas", (req, res) => {
   }
 });
 
-
 //  Make the form modifiable
 // the id is just a placeholder (route param)
 app.get("/ideas/edit/:id", (req, res) => {
   Idea.findOne({
-    _id: req.params.id,
-  }).then((idea) => {
-    res.render("ideas/edit", {
-      idea: idea,
-    });
-  });
+    _id : req.params.id
+  })
+  .lean()
+  .then((idea) => {
+    res.render('ideas/edit', {
+      idea : idea
+    })
+  })
 });
 // PORT
 app.listen(port, () => {
