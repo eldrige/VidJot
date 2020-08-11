@@ -134,6 +134,16 @@ app.put("/ideas/:id", (req, res) => {
   });
 });
 
+
+// delete idea
+// you might notice that d delete and edit have the same route, but different methods(this is ok)
+app.delete("/ideas/:id", (req, res) => {
+  // the remove gets it offf the database
+  Idea.remove( {_id: req.params.id})
+  .then(() => res.redirect('/ideas'))
+  // res.send("deleted");
+});
+
 // PORT
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
