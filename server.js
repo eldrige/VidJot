@@ -40,6 +40,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
+// static folder
 app.use(express.static(path.join(__dirname, "/public/")));
 
 // ROUTES
