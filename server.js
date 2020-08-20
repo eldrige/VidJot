@@ -7,9 +7,13 @@ const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
+const passport = require("passport")
 
 // Map global promise - gets rid of mongodb deprecated promise warning
 mongoose.promise = global.Promise;
+
+// Passport Config
+require('./config/passport')(passport)
 
 // connnect to mongoose
 mongoose
@@ -47,7 +51,7 @@ app.use(express.static(path.join(__dirname, "/public/")));
 
 // index route
 app.get("/", (req, res) => {
-  const title = "My first view";
+  const title = "Video Jotter";
   res.render("index", {
     title: title, // sort of passing it into the index.exphbs view (interpolation)
   });

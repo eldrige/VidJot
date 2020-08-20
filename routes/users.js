@@ -1,14 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-// const passport = require('passport')
+const passport = require("passport");
+const router = express.Router();
 
 // load user model
 require("../models/User");
-
 const User = mongoose.model("users");
 
-const router = express.Router();
+
 
 // user login route
 router.get("/login", (req, res) => {
@@ -20,6 +20,17 @@ router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
+// Login form POST
+// the local is a strategy installed using npm i passport local
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/ideas",
+    failureRedirect: "/users/login",
+    failureFlash: true,
+  })(req, res, next);
+});
+
+
 // Register form POST
 router.post("/register", (req, res) => {
   // console.log(req.body);
@@ -27,14 +38,16 @@ router.post("/register", (req, res) => {
 
   // validation
   let errors = [];
-
+  // check if passwords matches
   if (req.body.password !== req.body.password2) {
     errors.push({ text: "Passwords do not match" });
   }
   if (req.body.password.length < 7) {
     errors.push({ text: "password must be atleast seven characters" });
   }
+  // if error arrray contains errors
 
+  // this re renders the form , with the already filled input
   if (errors.length > 0) {
     res.render("users/register", {
       errors: errors,
@@ -49,15 +62,16 @@ router.post("/register", (req, res) => {
     User.findOne({ email: req.body.email }).then((user) => {
       if (user) {
         req.flash("error_msg", "Email already exists");
-        res.redirect("users/login");
-      } else {  //else save user to the database
+        res.redirect("users/register");
+      } else {
+        //else save user to the database
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
           password: req.body.password,
         });
         // console.log(newUser);
-        // bcrypt encrupts a password with a hash
+        // bcrypt encrypts a password with a hash
 
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -68,7 +82,7 @@ router.post("/register", (req, res) => {
               .save()
               .then((user) => {
                 // req.flash("success_msg", "You are now registered and can log in");
-                res.redirect("/users/register");
+                res.redirect("/users/login");
               })
               .catch((err) => {
                 console.error(err);
@@ -76,7 +90,6 @@ router.post("/register", (req, res) => {
               });
           });
         });
-        // res.send("Passed");
       }
     });
   }

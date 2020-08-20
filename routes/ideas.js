@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const router = express.Router();
 
@@ -60,7 +60,7 @@ router.post("/", (req, res) => {
 
 //  Make the form modifiable
 // the id is just a placeholder (route param)
-router.get("//edit/:id", (req, res) => {
+router.get("/edit/:id", (req, res) => {
   Idea.findOne({
     _id: req.params.id,
   })
@@ -71,8 +71,6 @@ router.get("//edit/:id", (req, res) => {
       });
     });
 });
-
-
 
 // edit form process
 router.put("/:id", (req, res) => {
