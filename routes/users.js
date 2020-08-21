@@ -8,18 +8,6 @@ const router = express.Router();
 require("../models/User");
 const User = mongoose.model("users");
 
-
-
-// user login route
-router.get("/login", (req, res) => {
-  res.render("users/login");
-});
-
-// reister form route
-router.get("/register", (req, res) => {
-  res.render("users/register");
-});
-
 // Login form POST
 // the local is a strategy installed using npm i passport local
 router.post("/login", (req, res, next) => {
@@ -30,6 +18,15 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+// user login route
+router.get("/login", (req, res) => {
+  res.render("users/login");
+});
+
+// reister form route
+router.get("/register", (req, res) => {
+  res.render("users/register");
+});
 
 // Register form POST
 router.post("/register", (req, res) => {
@@ -42,8 +39,8 @@ router.post("/register", (req, res) => {
   if (req.body.password !== req.body.password2) {
     errors.push({ text: "Passwords do not match" });
   }
-  if (req.body.password.length < 7) {
-    errors.push({ text: "password must be atleast seven characters" });
+  if (req.body.password.length < 4) {
+    errors.push({ text: "password must be atleast four characters" });
   }
   // if error arrray contains errors
 

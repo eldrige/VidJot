@@ -1,3 +1,8 @@
+{{!-- passport js error notification --}}
+{{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+{{/if}}
+{{!-- loop thru array of errors --}}
 {{#each errors}}
 <div class="alert alert-danger">{{text}}</div>
 {{else}}

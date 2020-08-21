@@ -6,14 +6,16 @@ const exphbs = require("express-handlebars");
 const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const flash = require("connect-flash")
+const session = require("express-session")
 const methodOverride = require("method-override");
-const passport = require("passport")
+const passport = require("passport");
 
 // Map global promise - gets rid of mongodb deprecated promise warning
 mongoose.promise = global.Promise;
 
 // Passport Config
-require('./config/passport')(passport)
+require("./config/passport")(passport);
 
 // connnect to mongoose
 mongoose
@@ -47,6 +49,17 @@ app.use(bodyParser.json());
 // static folder
 app.use(express.static(path.join(__dirname, "/public/")));
 
+// express session middleware
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  savzeUnintialized: true
+}))
+
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
 // ROUTES
 
 // index route
@@ -63,6 +76,18 @@ app.get("/about", (req, res) => {
 
 // method overiride middleware, overirde helps us to create put requests
 app.use(methodOverride("_method"));
+
+
+app.use(flash())
+
+// Global Variables
+app.use(function(req, res, next){
+  res.locals.success_msg = req.flash("success_msg")
+  res.locals.error_msg = req.flash("error_msg")
+  res.locals.error = req.flash("error")
+  res.locals.user = req.user || null  // represents the global user
+  next()
+})
 
 // use routes
 // use idea routes
