@@ -8,15 +8,7 @@ const router = express.Router();
 require("../models/User");
 const User = mongoose.model("users");
 
-// Login form POST
-// the local is a strategy installed using npm i passport local
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/ideas",
-    failureRedirect: "/users/login",
-    failureFlash: true,
-  })(req, res, next);
-});
+
 
 // user login route
 router.get("/login", (req, res) => {
@@ -90,6 +82,16 @@ router.post("/register", (req, res) => {
       }
     });
   }
+});
+
+// Login form POST
+// the local is a strategy installed using npm i passport local
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/ideas",
+    failureRedirect: "/users/login",
+    failureFlash: true,
+  })(req,res,next)
 });
 
 // Logout user

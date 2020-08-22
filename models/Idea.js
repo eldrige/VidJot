@@ -15,6 +15,10 @@ const IdeaSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  user: {
+    type: String,
+    required: true,
+  }, //so the id of the user, gets added to the schema as well
 });
 
 mongoose.model("ideas", IdeaSchema);
