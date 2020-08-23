@@ -1,7 +1,7 @@
 "use strict";
 
 // constants and exports
-var port = 8000;
+var port = process.env.PORT || 8000;
 
 var express = require("express");
 
@@ -26,10 +26,13 @@ var passport = require("passport"); // Map global promise - gets rid of mongodb 
 
 mongoose.promise = global.Promise; // Passport Config
 
-require("./config/passport")(passport); // connnect to mongoose
+require("./config/passport")(passport); // DB config
 
 
-mongoose.connect("mongodb://localhost/vidjot-dev", {
+var db = require("./config/database"); // connnect to mongoose
+
+
+mongoose.connect(db.mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function () {

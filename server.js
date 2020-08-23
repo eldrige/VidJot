@@ -1,5 +1,5 @@
 // constants and exports
-const port = 8000;
+const port = process.env.PORT || 8000;
 const express = require("express");
 const app = express();
 const exphbs = require("express-handlebars");
@@ -16,10 +16,12 @@ mongoose.promise = global.Promise;
 
 // Passport Config
 require("./config/passport")(passport);
+// DB config
+const db = require("./config/database");
 
 // connnect to mongoose
 mongoose
-  .connect("mongodb://localhost/vidjot-dev", {
+  .connect(db.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
